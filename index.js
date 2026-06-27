@@ -204,9 +204,9 @@ async function run() {
 
     console.log(`MongoDB Connected Successfully: ${dbName}`);
 
-    // ============================================================
-    // BROWSE BOOKS (ONLY APPROVED/PUBLISHED ARE SHOWN - NO PENDING)
-    // ============================================================
+  
+
+
     app.get("/books", async (req, res) => {
       try {
         const {
@@ -267,9 +267,10 @@ async function run() {
       }
     });
 
-    // ============================================================
-    // FEATURED BOOKS (ONLY APPROVED/PUBLISHED ARE SHOWN - NO PENDING)
-    // ============================================================
+  
+
+
+
     app.get("/featured-books", async (req, res) => {
       try {
         const books = await booksCollection.find({ approvalStatus: { $in: ["Approved", "Published"] } }).sort({ createdAt: -1 }).limit(6).toArray();
@@ -279,9 +280,9 @@ async function run() {
       }
     });
 
-    // ============================================================
-    // LIBRARIAN ADD BOOK (FULL COMPATIBLE DATA STRUCTURE)
-    // ============================================================
+   
+
+    
     app.post("/books", verifyJWT, verifyLibrarianOrAdmin, async (req, res) => {
       try {
         const book = req.body;
@@ -322,10 +323,9 @@ async function run() {
         res.status(500).send({ success: false, message: error.message });
       }
     });
+ 
 
-    // ============================================================
-    // LIBRARIAN EDIT BOOK (DIRECTLY PUSH TO BOOKS COLLECTION)
-    // ============================================================
+
     app.put("/books/:id", verifyJWT, verifyLibrarianOrAdmin, async (req, res) => {
       try {
         const { id } = req.params;
@@ -364,9 +364,9 @@ async function run() {
       }
     });
 
-    // ============================================================
-    // LIBRARIAN GET INVENTORY ROUTE WITH PAGINATION
-    // ============================================================
+
+
+
     app.get("/dashboard/librarian/books", verifyJWT, verifyLibrarianOrAdmin, async (req, res) => {
       try {
         const { page = 1, limit = 12 } = req.query;
@@ -385,9 +385,10 @@ async function run() {
       }
     });
 
-    // ============================================================
-    // LIBRARIAN TOGGLE PUBLISH/UNPUBLISHED STATUS (STRICT FILTER)
-    // ============================================================
+
+
+
+
     app.patch("/dashboard/librarian/books/:id/toggle-publish", verifyJWT, verifyLibrarianOrAdmin, async (req, res) => {
       try {
         const { id } = req.params;
@@ -415,9 +416,8 @@ async function run() {
       }
     });
 
-    // ============================================================
-    // BOOK DETAILS PAGE DISCOVERY
-    // ============================================================
+
+    
     app.get("/books/:id", async (req, res) => {
       try {
         const lookupQuery = buildBookFilter(req.params.id);
